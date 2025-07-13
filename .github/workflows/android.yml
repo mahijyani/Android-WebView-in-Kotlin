@@ -16,7 +16,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # पूरा इतिहास fetch करेगा (Git submodules के लिए जरूरी)
+        fetch-depth: 0
 
     - name: Verify Gradle Wrapper
       run: |
@@ -34,17 +34,19 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Build with Gradle
+    - name: Build Release APK
+      run: ./gradlew assembleRelease
+
+    - name: List build outputs
       run: |
-        ./gradlew assembleDebug
-        ./gradlew assembleRelease || echo "Release build failed - continuing"
-        ./gradlew bundleRelease || echo "Bundle build failed - continuing"
+        echo "Finding APK and AAB files..."
+        find . -type f \( -name "*.apk" -o -name "*.aab" \)
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: android-build-outputs
         path: |
-          app/**/*.apk
-          app/**/*.aab
+          app/build/outputs/**/*.apk
+          app/build/outputs/**/*.aab
         if-no-files-found: warn
