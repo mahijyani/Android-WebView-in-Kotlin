@@ -45,6 +45,6 @@ jobs:
       with:
         name: android-build-outputs
         path: |
-          app/build/outputs/apk/**/*.apk
-          app/build/outputs/bundle/**/*.aab
+          app/**/*.apk
+          app/**/*.aab
         if-no-files-found: warn
